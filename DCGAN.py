@@ -1,3 +1,5 @@
+#b4輪講 gan
+
 from __future__ import print_function
 import argparse
 import os
