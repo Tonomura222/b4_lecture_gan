@@ -157,7 +157,6 @@ def train(args):
 
             ## Train with all-fake batch
             # Generate batch of latent vectors
-            #平均0,分散1の正規分布に従うノイズが要素のtensor配列を作成
             noise = torch.randn(b_size, args.nz, 1, 1, device=device)
             # Generate fake image batch with G
             fake = netG(noise)
@@ -269,19 +268,17 @@ def arg_parser():
 
     #実行時に入力、何もしないとdefaultの値
 
-    parser.add_argument('--dataroot', type=str, default="./celeba/")
+    parser.add_argument('--dataroot', type=str, default="./img_align_celeba/")
     #各データを保存するパス
     parser.add_argument('--save_model_path', type=str, default="./test/model/")
     parser.add_argument('--save_csv_path', type=str, default="./test/csv/")
     parser.add_argument('--save_sample_path', type=str, default="./test/sample/")
     parser.add_argument('--save_image_path', type=str, default="./test/image/")
-    #epoch数
     parser.add_argument('--num_epochs', type=int, default=100)
     parser.add_argument('--image_size', type=int, default=64)
     parser.add_argument('--lr', type=float, default=1e-4)
     parser.add_argument('--beta1', type=float, default=0.5)
     parser.add_argument('--batch_size', type=int, default=128)
-    #zの次元数
     parser.add_argument('--nz', type=int, default=100, help="Size of z latent vector (i.e. size of generator input)潜在変数zのサイズ")
     parser.add_argument('--nc', type=int, default=3, help="Number of channels in the training images")
     parser.add_argument('--ngf', type=int, default=64, help="Size of feature maps in generator Gの特徴マップのサイズ")
