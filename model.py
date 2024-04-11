@@ -1,3 +1,5 @@
+#generator discriminatorのクラス
+
 from torch import nn
 
 #ベクトルzから画像を生成
