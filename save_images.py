@@ -35,13 +35,12 @@ def check_dir(p):
 def arg_parser():
     parser = argparse.ArgumentParser()
 
-    # parser.add_argument('--dataroot', type=str, default="./celeba/")
-    parser.add_argument('--load_model_path', type=str, default="./model_ex3/gen_040.pt")
-    #parser.add_argument('--save_csv_path', type=str, default="./csv/")
-    #生成画像を保存するフォルダ
-    parser.add_argument('--save_generated_image_path', type=str, default="./fakeImages,3,epoch=10/")
+    #generatorのパス
+    parser.add_argument('--load_model_path', type=str, default="./result/model/gen_150.pt")
+    #生成画像保存先のパス
+    parser.add_argument('--save_generated_image_path', type=str, default="./result/generated_images_celeba/")
     #parser.add_argument('--save_image_path', type=str, default="./image/")
-    parser.add_argument('--num_epochs', type=int, default=100)
+    #parser.add_argument('--num_epochs', type=int, default=100)
     parser.add_argument('--image_size', type=int, default=64)
     parser.add_argument('--lr', type=float, default=1e-4)
     parser.add_argument('--beta1', type=float, default=0.5)
@@ -68,7 +67,7 @@ def test(args):
     # fixed_noise = torch.randn(1, args.nz, 1, 1, device=device)
     # z_0_value = -2.0
 
-    for n in range(1000):#作る画像の数
+    for n in range(1000):#作る画像枚数
         # fixed_noise[0, 45:50, 0, 0] = z_0_value　#潜在ベクトルを変更する場合
         noise = torch.randn(1, args.nz, 1, 1, device=device) #潜在ベクトルをランダムに作る場合
         fake = Model(noise).detach().cpu()

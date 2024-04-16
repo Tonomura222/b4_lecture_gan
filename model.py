@@ -1,4 +1,4 @@
-#generator discriminatorのクラス
+#generator discriminatorクラス
 
 from torch import nn
 

@@ -266,14 +266,14 @@ def train(args):
 def arg_parser():
     parser = argparse.ArgumentParser()
 
-    #実行時に入力、何もしないとdefaultの値
-
+    #入力画像データ
     parser.add_argument('--dataroot', type=str, default="./img_align_celeba/")
-    #各データを保存するパス
-    parser.add_argument('--save_model_path', type=str, default="./test/model/")
-    parser.add_argument('--save_csv_path', type=str, default="./test/csv/")
-    parser.add_argument('--save_sample_path', type=str, default="./test/sample/")
-    parser.add_argument('--save_image_path', type=str, default="./test/image/")
+    #各データを保存先パス
+    parser.add_argument('--save_model_path', type=str, default="./result/model/")
+    parser.add_argument('--save_csv_path', type=str, default="./result/csv/")
+    parser.add_argument('--save_sample_path', type=str, default="./result/sample/")
+    parser.add_argument('--save_image_path', type=str, default="./result/image/")
+    #ハイパーパラメータ
     parser.add_argument('--num_epochs', type=int, default=100)
     parser.add_argument('--image_size', type=int, default=64)
     parser.add_argument('--lr', type=float, default=1e-4)
@@ -289,7 +289,6 @@ def arg_parser():
     args = parser.parse_args()
     return args
 
-
 def main(args):
     check_dir(args.save_model_path)
     check_dir(args.save_csv_path)
@@ -298,9 +297,6 @@ def main(args):
 
     train(args)
 
-
 if __name__ == '__main__':
     args = arg_parser()
     main(args)
-
-

@@ -180,7 +180,6 @@ def _compute_statistics_of_path(path, model, batch_size, dims, cuda):
 
         # Bring images to shape (B, 3, H, W)
         imgs = imgs.transpose((0, 3, 1, 2))
-        print(imgs)
         
 
         # Rescale images to be between 0 and 1 0から1の範囲にスケーリング
@@ -191,7 +190,7 @@ def _compute_statistics_of_path(path, model, batch_size, dims, cuda):
 
     return m, s
 
-
+#2つのパスにある画像のFIDを計算
 def calculate_fid_given_paths(paths, batch_size, cuda, dims):
     """Calculates the FID of two paths"""
     for p in paths:
@@ -203,7 +202,6 @@ def calculate_fid_given_paths(paths, batch_size, cuda, dims):
     model = InceptionV3([block_idx])
     model.cuda()
     
-
     #ここでエラーor計算時間がかかる
     m1, s1 = _compute_statistics_of_path(paths[0], model, batch_size,
                                          dims, cuda=True)
@@ -211,7 +209,6 @@ def calculate_fid_given_paths(paths, batch_size, cuda, dims):
     m2, s2 = _compute_statistics_of_path(paths[1], model, batch_size,
                                          dims, cuda=True)
     
-
     fid_value = calculate_frechet_distance(m1, s1, m2, s2)
 
     return fid_value
@@ -222,8 +219,7 @@ if __name__ == '__main__':
     os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 
     #引数で実画像と生成画像のパスを指定 
-
-    fid_value = calculate_fid_given_paths(['./test1/', './test2/'],
+    fid_value = calculate_fid_given_paths(['./img_align_celeba/img_align_celeba/', './generated_images/'],
                                           args.batch_size,
                                           args.gpu != '',
                                           args.dims)
