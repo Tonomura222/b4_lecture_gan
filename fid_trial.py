@@ -1,6 +1,7 @@
 import os
 import pathlib
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
+import shutil
 
 import torch
 import numpy as np
@@ -226,11 +227,20 @@ def calculate_fid_given_paths(paths, batch_size, cuda, dims):
 
 if __name__ == "__main__":
     args = parser.parse_args()
-    os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
+    # os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
 
-    # 引数で実画像と生成画像のパスを指定
+    dst_folder = "./celeba_10000/"
+    src_folder = "./img_align_celeba/img_align_celeba/"
+    os.makedirs(dst_folder, exist_ok=True)
+    if len(os.listdir(dst_folder)) == 0:
+        files = os.listdir(src_folder)[:10000]
+        for f in files:
+            src_filepath = src_folder + f
+            shutil.copy(src_filepath, dst_folder)
+
+    # 実画像と生成画像のパスを指定
     fid_value = calculate_fid_given_paths(
-        ["./img_align_celeba/img_align_celeba/", "./generated_images/"],
+        [dst_folder, "./generated_images/"],
         args.batch_size,
         args.gpu != "",
         args.dims,
