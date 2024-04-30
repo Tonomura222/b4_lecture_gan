@@ -30,9 +30,7 @@ parser.add_argument(
         "By default, uses pool3 features"
     ),
 )
-parser.add_argument(
-    "-c", "--gpu", default="0", type=str, help="GPU to use (leave blank for CPU only)"
-)
+parser.add_argument("-c", "--gpu", default="0", type=str, help="GPU to use (leave blank for CPU only)")
 
 
 def get_activations(images, model, batch_size=64, dims=2048, cuda=True, verbose=True):
@@ -76,7 +74,8 @@ def get_activations(images, model, batch_size=64, dims=2048, cuda=True, verbose=
         end = start + batch_size
 
         batch = torch.from_numpy(images[start:end]).type(torch.FloatTensor)
-        batch = Variable(batch, volatile=True)
+        with torch.no_grad():
+            batch = Variable(batch)
         if cuda:
             batch = batch.cuda()
 
