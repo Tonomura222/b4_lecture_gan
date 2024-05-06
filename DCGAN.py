@@ -42,7 +42,7 @@ def weights_init(m):
         nn.init.normal_(m.weight.data, 1.0, 0.02)
         nn.init.constant_(m.bias.data, 0)
 
-#画像データをテンソルにとりこむ
+#画像データを読み込む
 def load_data(args):
     dataset = dset.ImageFolder(root=args.dataroot,
                                transform=transforms.Compose([
@@ -66,7 +66,7 @@ def train(args):
 
     dataloader = load_data(args)
 
-    # Plot some training images正解画像表示
+    # Plot some training images
     real_batch = next(iter(dataloader))
     plt.figure(figsize=(8, 8))
     plt.axis("off")
@@ -208,7 +208,7 @@ def train(args):
 
                 vutils.save_image(fake,
                                   os.path.join(args.save_sample_path, f"fake_iter_{iters:03}.png"),
-                                  nrow=8, range=(-1.0, 1.0), normalize=True)
+                                  nrow=8, value_range=(-1.0, 1.0), normalize=True)
 
             iters += 1
 
