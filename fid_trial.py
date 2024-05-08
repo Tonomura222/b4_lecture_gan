@@ -219,14 +219,7 @@ def calculate_fid_given_paths(paths, batch_size, cuda, dims):
 
     return fid_value
 
-
-if __name__ == "__main__":
-    args = parser.parse_args()
-    # os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
-
-    #実画像10000枚をコピー
-    dst_folder = "./celeba_10000/"
-    src_folder = "./img_align_celeba/img_align_celeba/"
+def copy_celeba(dst_folder, src_folder):
     os.makedirs(dst_folder, exist_ok=True)
     if len(os.listdir(dst_folder)) == 0:
         files = os.listdir(src_folder)[:10000]
@@ -234,6 +227,15 @@ if __name__ == "__main__":
             src_filepath = src_folder + f
             shutil.copy(src_filepath, dst_folder)
 
+
+if __name__ == "__main__":
+    args = parser.parse_args()
+    # os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
+
+    #celebaの場合、評価用の10000枚を別フォルダにコピー
+    dst_folder = "./celeba_10000/"
+    src_folder = "./img_align_celeba/img_align_celeba/"
+    copy_celeba(dst_folder, src_folder)
 
     # 実画像と生成画像のパスを指定
     fid_value = calculate_fid_given_paths(
