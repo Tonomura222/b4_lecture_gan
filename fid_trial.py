@@ -1,6 +1,7 @@
 import os
 import pathlib
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
+import shutil
 
 import torch
 import numpy as np
@@ -19,19 +20,13 @@ parser = ArgumentParser()
 #                     help=('Path to the generated images or '
 #                           'to .npz statistic files'))
 parser.add_argument("--batch-size", type=int, default=64, help="Batch size to use")
-parser.add_argument(
-    "--dims",
-    type=int,
-    default=2048,
-    choices=list(InceptionV3.BLOCK_INDEX_BY_DIM),
+parser.add_argument("--dims", type=int, default=2048, choices=list(InceptionV3.BLOCK_INDEX_BY_DIM),
     help=(
         "Dimensionality of Inception features to use. "
         "By default, uses pool3 features"
     ),
 )
-parser.add_argument(
-    "-c", "--gpu", default="0", type=str, help="GPU to use (leave blank for CPU only)"
-)
+parser.add_argument("-c", "--gpu", default="0", type=str, help="GPU to use (leave blank for CPU only)")
 
 
 def get_activations(images, model, batch_size=64, dims=2048, cuda=True, verbose=True):
@@ -75,7 +70,8 @@ def get_activations(images, model, batch_size=64, dims=2048, cuda=True, verbose=
         end = start + batch_size
 
         batch = torch.from_numpy(images[start:end]).type(torch.FloatTensor)
-        batch = Variable(batch, volatile=True)
+        with torch.no_grad():
+            batch = Variable(batch)
         if cuda:
             batch = batch.cuda()
 
@@ -226,11 +222,22 @@ def calculate_fid_given_paths(paths, batch_size, cuda, dims):
 
 if __name__ == "__main__":
     args = parser.parse_args()
-    os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
+    # os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
 
-    # 引数で実画像と生成画像のパスを指定
+    #実画像10000枚をコピー
+    dst_folder = "./celeba_10000/"
+    src_folder = "./img_align_celeba/img_align_celeba/"
+    os.makedirs(dst_folder, exist_ok=True)
+    if len(os.listdir(dst_folder)) == 0:
+        files = os.listdir(src_folder)[:10000]
+        for f in files:
+            src_filepath = src_folder + f
+            shutil.copy(src_filepath, dst_folder)
+
+
+    # 実画像と生成画像のパスを指定
     fid_value = calculate_fid_given_paths(
-        ["./img_align_celeba/img_align_celeba/", "./generated_images/"],
+        ["./celeba_10000", "./generated_images/"],
         args.batch_size,
         args.gpu != "",
         args.dims,

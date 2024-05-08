@@ -38,7 +38,7 @@ def arg_parser():
     #generatorのパス
     parser.add_argument('--load_model_path', type=str, default="./result/model/gen_150.pt")
     #生成画像保存先のパス
-    parser.add_argument('--save_generated_image_path', type=str, default="./result/generated_images_celeba/")
+    parser.add_argument('--save_generated_image_path', type=str, default="./generated_images/")
     #parser.add_argument('--save_image_path', type=str, default="./image/")
     #parser.add_argument('--num_epochs', type=int, default=100)
     parser.add_argument('--image_size', type=int, default=64)
@@ -67,20 +67,19 @@ def test(args):
     # fixed_noise = torch.randn(1, args.nz, 1, 1, device=device)
     # z_0_value = -2.0
 
-    for n in range(1000):#作る画像枚数
+    for n in range(10000):#作る画像枚数
         # fixed_noise[0, 45:50, 0, 0] = z_0_value　#潜在ベクトルを変更する場合
         noise = torch.randn(1, args.nz, 1, 1, device=device) #潜在ベクトルをランダムに作る場合
         fake = Model(noise).detach().cpu()
         vutils.save_image(fake,
-                          os.path.join(args.save_generated_image_path, f"fake_iter_{n:03}.jpg"),
-                          nrow=8, range=(-1.0, 1.0), normalize=True)
+                          os.path.join(args.save_generated_image_path, f"fake_iter_{n:04}.jpg"),
+                          nrow=8, value_range=(-1.0, 1.0), normalize=True) # 引数のエラーが出ることがあるかも
         # z_0_value += 0.2　#潜在ベクトルを変更する場合
 
 
 def main(args):
     # check_dir(args.load_model_path)
     check_dir(args.save_generated_image_path)
-
     test(args)
 
 
